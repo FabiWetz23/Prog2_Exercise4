@@ -1,12 +1,33 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.observer.Observable;
+import at.ac.fhcampuswien.fhmdb.observer.Observer;
 import com.j256.ormlite.dao.Dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class WatchlistRepository {
+public class WatchlistRepository implements Observable {
     private static WatchlistRepository instance;
     private Dao<WatchlistMovieEntity, Long> dao;
+    private List<Observer> observers = new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String messages) {
+        for (Observer observer : this.observers) {
+            observer.update(messages);
+        }
+    }
 
     private WatchlistRepository() throws DataBaseException {
         try {
@@ -38,6 +59,9 @@ public class WatchlistRepository {
             long count = dao.queryBuilder().where().eq("apiId", movie.getApiId()).countOf();
             if (count == 0) {
                 dao.create(movie);
+                notifyObservers("Movie was successfully added to the Watchlist");
+            } else {
+                notifyObservers("Movie is already in Watchlist!");
             }
         } catch (Exception e) {
             e.printStackTrace();
