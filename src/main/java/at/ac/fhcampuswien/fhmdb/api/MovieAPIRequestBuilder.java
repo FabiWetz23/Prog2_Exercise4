@@ -82,4 +82,3 @@ public class MovieAPIRequestBuilder {
         return url.toString();
     }
 }
-
