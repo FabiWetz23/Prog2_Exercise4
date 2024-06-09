@@ -53,6 +53,8 @@ public class MovieListController implements Initializable {
 
     protected SortedState sortedState;
 
+    private final MyFactory myFactory = MyFactory.getInstance();
+
     private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) -> {
         if (clickedItem instanceof Movie movie) {
             WatchlistMovieEntity watchlistMovieEntity = new WatchlistMovieEntity(

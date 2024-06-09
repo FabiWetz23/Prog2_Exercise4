@@ -30,9 +30,9 @@ public class MainController {
     private HamburgerBasicCloseTransition transition;
 
     public void initialize() {
-        transition = new HamburgerBasicCloseTransition(hamburgerMenu);
-        transition.setRate(-1);
-        drawer.toBack();
+        MyFactory myFactory = MyFactory.getInstance();
+        FXMLLoader loader = new FXMLLoader(MainController.class.getResource(UIComponent.HOME.path));
+        loader.setControllerFactory(myFactory);
 
         hamburgerMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             toggleMenuDrawer();
